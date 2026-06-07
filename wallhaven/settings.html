@@ -1,0 +1,76 @@
+<div class="form-group">
+    <label for="query" class="form-label">Search Query:</label>
+    <input type="text" id="query" name="query" placeholder="e.g. nature, space, cars..." class="form-input">
+    <small style="color: var(--text-primary);">Optional: keywords to search for.</small>
+</div>
+
+<div class="form-group">
+    <label for="sorting" class="form-label">Sorting:</label>
+    <select id="sorting" name="sorting" class="form-input">
+        <option value="random">Random</option>
+        <option value="relevance">Relevance</option>
+        <option value="date_added">Date Added</option>
+        <option value="favorites">Most Favorited</option>
+        <option value="toplist">Top List</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="categories" class="form-label">Categories:</label>
+    <select id="categories" name="categories" class="form-input">
+        <option value="111">All (General + Anime + People)</option>
+        <option value="100">General Only</option>
+        <option value="010">Anime Only</option>
+        <option value="001">People Only</option>
+        <option value="110">General + Anime</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label class="form-label">Content Filter (Purity):</label>
+    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="purity_sfw" name="purity_sfw" value="1" style="width: 16px; height: 16px;">
+            <span>SFW (Safe for Work)</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="purity_sketchy" name="purity_sketchy" value="1" style="width: 16px; height: 16px;">
+            <span>Sketchy</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="purity_nsfw" name="purity_nsfw" value="1" style="width: 16px; height: 16px;">
+            <span>NSFW (Requires API Key)</span>
+        </label>
+    </div>
+    <small style="color: var(--text-primary);">Select one or more. NSFW requires <strong>WALLHAVEN_API_KEY</strong> set in the <a href="/api-keys" target="_blank">API Keys page</a>.</small>
+</div>
+
+<div class="form-group">
+    <label for="color" class="form-label">Color Filter:</label>
+    <select id="color" name="color" class="form-input">
+        <option value="">Any</option>
+        <option value="660000">Dark Red</option>
+        <option value="0066cc">Blue</option>
+        <option value="006600">Green</option>
+        <option value="000000">Black</option>
+        <option value="ffffff">White</option>
+    </select>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (loadPluginSettings) {
+            document.getElementById('query').value = pluginSettings.query || '';
+            document.getElementById('sorting').value = pluginSettings.sorting || 'random';
+            document.getElementById('categories').value = pluginSettings.categories || '111';
+            document.getElementById('color').value = pluginSettings.color || '';
+
+            const purity = pluginSettings.purity || '100';
+            document.getElementById('purity_sfw').checked = purity[0] === '1';
+            document.getElementById('purity_sketchy').checked = purity[1] === '1';
+            document.getElementById('purity_nsfw').checked = purity[2] === '1';
+        } else {
+            document.getElementById('purity_sfw').checked = true;
+        }
+    });
+</script>
