@@ -12,9 +12,11 @@ class Wallhaven(BasePlugin):
         logger.info("=== Wallhaven Plugin: Starting image generation ===")
 
         query      = settings.get('query', '')
+        tags       = settings.get('tags', '')
         categories = settings.get('categories', '111')
         sorting    = settings.get('sorting', 'random')
         color      = settings.get('color', '')
+        ratio      = settings.get('ratio', 'landscape')
 
         # Load API key from .env (set via API Keys page in web UI)
         api_key = device_config.load_env_key("WALLHAVEN_API_KEY")
@@ -33,7 +35,16 @@ class Wallhaven(BasePlugin):
         if nsfw == '1' and not api_key:
             raise RuntimeError("NSFW content requires a Wallhaven API key set in the API Keys page.")
 
-        logger.info(f"Purity: {purity} | Categories: {categories} | Sorting: {sorting}")
+        # Build combined query string — tags use #tagname syntax in Wallhaven
+        query_parts = []
+        if query:
+            query_parts.append(query)
+        if tags:
+            for tag in [t.strip() for t in tags.split(',') if t.strip()]:
+                query_parts.append(f"#{tag}")
+        combined_query = ' '.join(query_parts)
+
+        logger.info(f"Purity: {purity} | Categories: {categories} | Sorting: {sorting} | Ratio: {ratio} | Query: '{combined_query}'")
 
         params = {
             'sorting': sorting,
@@ -41,12 +52,14 @@ class Wallhaven(BasePlugin):
             'purity': purity,
             'seed': str(random.randint(0, 999999)),
         }
-        if query:
-            params['q'] = query
+        if combined_query:
+            params['q'] = combined_query
         if color:
             params['colors'] = color
         if api_key:
             params['apikey'] = api_key
+        if ratio and ratio != 'any':
+            params['ratios'] = ratio
 
         try:
             session = get_http_session()

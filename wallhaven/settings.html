@@ -5,6 +5,12 @@
 </div>
 
 <div class="form-group">
+    <label for="tags" class="form-label">Tags:</label>
+    <input type="text" id="tags" name="tags" placeholder="e.g. anime, landscape, cyberpunk" class="form-input">
+    <small style="color: var(--text-primary);">Optional: comma-separated Wallhaven tags. Combined with search query.</small>
+</div>
+
+<div class="form-group">
     <label for="sorting" class="form-label">Sorting:</label>
     <select id="sorting" name="sorting" class="form-input">
         <option value="random">Random</option>
@@ -13,6 +19,16 @@
         <option value="favorites">Most Favorited</option>
         <option value="toplist">Top List</option>
     </select>
+</div>
+
+<div class="form-group">
+    <label for="ratio" class="form-label">Orientation Filter:</label>
+    <select id="ratio" name="ratio" class="form-input">
+        <option value="landscape">Landscape Only (Recommended)</option>
+        <option value="portrait">Portrait Only</option>
+        <option value="any">Any</option>
+    </select>
+    <small style="color: var(--text-primary);">Landscape prevents cropping on horizontal e-ink displays.</small>
 </div>
 
 <div class="form-group">
@@ -61,7 +77,9 @@
     document.addEventListener('DOMContentLoaded', () => {
         if (loadPluginSettings) {
             document.getElementById('query').value = pluginSettings.query || '';
+            document.getElementById('tags').value = pluginSettings.tags || '';
             document.getElementById('sorting').value = pluginSettings.sorting || 'random';
+            document.getElementById('ratio').value = pluginSettings.ratio || 'landscape';
             document.getElementById('categories').value = pluginSettings.categories || '111';
             document.getElementById('color').value = pluginSettings.color || '';
 
