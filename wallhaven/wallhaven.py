@@ -50,7 +50,7 @@ class Wallhaven(BasePlugin):
             'sorting': sorting,
             'categories': categories,
             'purity': purity,
-            'seed': str(random.randint(0, 999999)),
+            'per_page': 24,
         }
         if combined_query:
             params['q'] = combined_query
@@ -63,15 +63,25 @@ class Wallhaven(BasePlugin):
 
         try:
             session = get_http_session()
-            response = session.get(WALLHAVEN_API_URL, params=params)
-            response.raise_for_status()
-            data = response.json()
 
-            results = data.get('data', [])
+            # Fetch up to ~100 results across multiple pages, then pick randomly
+            all_results = []
+            for page in range(1, 5):  # pages 1–4 = up to 96 results (24 per page max)
+                paged_params = dict(params, page=page)
+                response = session.get(WALLHAVEN_API_URL, params=paged_params)
+                response.raise_for_status()
+                data = response.json()
+                page_results = data.get('data', [])
+                all_results.extend(page_results)
+                # Stop early if we got fewer than a full page (no more results)
+                if len(page_results) < 24:
+                    break
+
+            results = all_results
             if not results:
                 raise RuntimeError("No wallpapers found for the given search parameters.")
 
-            logger.info(f"Found {len(results)} wallpapers")
+            logger.info(f"Found {len(results)} wallpapers across up to 4 pages")
             selected = random.choice(results)
             image_url = selected['path']
             logger.info(f"Selected wallpaper: {image_url}")
