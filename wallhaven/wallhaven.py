@@ -100,5 +100,14 @@ class Wallhaven(BasePlugin):
         if not image:
             raise RuntimeError("Failed to load image, please check logs.")
 
+        # Optional color conversion
+        color_mode = settings.get('color_mode', 'color')
+        if color_mode == 'grayscale':
+            image = image.convert("L").convert("RGB")
+            logger.info("Applied grayscale conversion")
+        elif color_mode == 'black_and_white':
+            image = image.convert("1").convert("RGB")
+            logger.info("Applied black & white (dithered) conversion")
+
         logger.info("=== Wallhaven Plugin: Image generation complete ===")
         return image
