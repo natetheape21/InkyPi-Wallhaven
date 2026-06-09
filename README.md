@@ -4,9 +4,12 @@ A [Wallhaven](https://wallhaven.cc) wallpaper plugin for [InkyPi](https://github
 
 ## Features
 
-- Search wallpapers by keyword, category, and color
+- Search wallpapers by keyword, tags, category, and color
 - Sorting options: Random, Relevance, Top List, Most Favorited, Date Added
+- Orientation filter — landscape-only by default to prevent cropping on horizontal displays
+- Color mode — display in full color, grayscale, or dithered black & white
 - Content filtering: SFW, Sketchy, and NSFW (NSFW requires a free API key)
+- Picks randomly from the top 96 results for higher quality images
 - Works great in a playlist for automatic wallpaper rotation
 
 ## Installation
@@ -30,9 +33,12 @@ The **Wallhaven** plugin will appear in the InkyPi web UI.
 | Setting | Description |
 |---|---|
 | **Search Query** | Keywords to search for (e.g. `nature`, `space`, `cyberpunk`) |
+| **Tags** | Comma-separated Wallhaven tags (e.g. `anime, landscape`) — combined with search query |
 | **Sorting** | How to sort results — Random, Relevance, Top List, Favorites, Date Added |
+| **Orientation Filter** | Landscape Only, Portrait Only, or Any — landscape is default to prevent cropping |
 | **Categories** | General, Anime, People — or any combination |
 | **Content Filter** | SFW, Sketchy, NSFW (checkboxes, mix and match) |
+| **Color Mode** | Color (default), Grayscale, or Black & White (dithered) |
 | **Color Filter** | Filter by dominant color |
 
 ## API Key (Optional)
